@@ -15,6 +15,11 @@ public class Task {
     @Column(nullable = false)
     private String description;
 
+    @ManyToOne
+    @JoinColumn (name = "userId")
+    private User user;
+
+
     public Task() {
     }
 
@@ -34,6 +39,10 @@ public class Task {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public void setUserId(Long userId) { this.user.setId(userId); }
+
+    public Long getUserId () {return this.user.getUserId();}
 
     public String getDescription() {
         return description;
