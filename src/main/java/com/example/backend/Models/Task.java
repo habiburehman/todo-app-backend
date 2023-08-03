@@ -1,6 +1,7 @@
 package com.example.backend.Models;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,9 +16,8 @@ public class Task {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne
-    @JoinColumn (name = "userId")
-    private User user;
+    @Column (name = "userId")
+    private Long userId;
 
 
     public Task() {
@@ -40,9 +40,9 @@ public class Task {
         this.id = id;
     }
 
-    public void setUserId(Long userId) { this.user.setId(userId); }
+    public void setUserId(Long userId) { this.userId = userId; }
 
-    public Long getUserId () {return this.user.getUserId();}
+    public Long getUserId () {return this.userId; }
 
     public String getDescription() {
         return description;

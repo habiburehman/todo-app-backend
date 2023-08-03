@@ -17,8 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@CrossOrigin
 @RequestMapping("/api/v1/todo")
 public class TaskController {
     @Autowired
@@ -28,7 +28,6 @@ public class TaskController {
     public ResponseEntity<List<Task>> getAllTasks(@AuthenticationPrincipal Jwt principal) {
         Map<String, Object> claims = principal.getClaims();
         Long userId = (Long) claims.get("userId");
-        System.out.print(userId);
         List<Task> tasks = taskService.getAllTasks(userId);
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
@@ -49,6 +48,7 @@ public class TaskController {
     public ResponseEntity<?> addTask(@AuthenticationPrincipal Jwt principal, @Valid @RequestBody Task task, BindingResult bindingResult) {
         Map<String, Object> claims = principal.getClaims();
         Long userId = (Long) claims.get("userId");
+        System.out.print(userId);
         if (bindingResult.hasErrors() || task.getDescription() == null) {
             Map<String, String> errorMap = new HashMap<>();
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -58,11 +58,9 @@ public class TaskController {
 
             return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
         }
-
         Task createdTask = taskService.addTask(task, userId);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<Task> updateTask(@AuthenticationPrincipal Jwt principal, @PathVariable Long id, @RequestBody Task task) {
